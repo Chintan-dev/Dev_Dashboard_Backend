@@ -12,6 +12,8 @@ namespace Dev_Dashboard.MapperProfiler
             CreateMap<Role, RoleDTO>();
             CreateMap<UserDetail, UserDetailDTO>();
             CreateMap<UserDetailDTO, UserDetail>();
+            CreateMap<UserMenuDTO, UserMenu>();
+            CreateMap<UserMenu, UserMenuDTO>();
         }
     }
 }

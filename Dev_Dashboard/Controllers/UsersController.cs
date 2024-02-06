@@ -46,5 +46,10 @@ namespace Dev_Dashboard.Controllers
         {
             return _commenService.CreateAction(userDetailDTO);
         }
+        [HttpPost("CreateMenu")]
+        public Task<CommonResponseModel> AddMenu(UserMenuDTO userMenuDTO)
+        {
+            return _commenService.CreateMenu(userMenuDTO);
+        }
     }
 }

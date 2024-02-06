@@ -11,6 +11,7 @@ namespace Dev_Dashboard.Services.Interface
         public Task<CommonResponseModel> RoleAction(RoleDTO roleDTO);
         public Task<CommonResponseModel> CreateAction(UserDetailDTO userDetailDTO);
         public Task<CommonResponseModel> CreateUser(UserDetailDTO userDetailDTO);
+        public Task<CommonResponseModel> CreateMenu(UserMenuDTO userMenuDTO);
         public Task<CommonResponseModel> GetRole();
         public Task<CommonResponseModel> GetUser();
     }

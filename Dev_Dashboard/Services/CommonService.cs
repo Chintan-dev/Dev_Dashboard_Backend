@@ -132,5 +132,31 @@ namespace Dev_Dashboard.Services
                 return new CommonResponseModel(StatusCode: 500, Success: false, Message: ex.Message, Data: null);
             }
         }
+        public async Task<CommonResponseModel> CreateMenu(UserMenuDTO userMenuDTO)
+        {
+            try
+            {
+                var UserMenu = _mapper.Map<UserMenu>(userMenuDTO);
+                if (UserMenu == null)
+                {
+                    return new CommonResponseModel(StatusCode: 400, Success: false, Message: "Data is null", Data: null);
+                }
+                var check = _context.UserMenus.Any(x => x.MenuName.ToLower().Trim() == UserMenu.MenuName.ToLower());
+                if (check)
+                {
+                    // Same userDetail already exists
+                    return new CommonResponseModel(StatusCode: 400, Success: false, Message: "UserMenu with the same name already exists.", Data: null);
+                }
+                await _context.UserMenus.AddAsync(UserMenu);
+                await _context.SaveChangesAsync();
+                return new CommonResponseModel(StatusCode: 200, Success: true, Message: "User Saved", Data: null);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, "An error occurred while processing the role.");
+                //return new CommonResponseModel(StatusCode: 500, Success: false, Message: "An error occurred while processing the role.", Data: null);
+                return new CommonResponseModel(StatusCode: 500, Success: false, Message: ex.Message, null);
+            }
+        }
     }
 }
