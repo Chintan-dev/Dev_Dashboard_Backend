@@ -9,10 +9,14 @@ namespace Dev_Dashboard.Services.Interface
         //public Task<UserDetails> GetUserDetailsAsync(int id);
         public Task<CommonResponseModel> CreateRole(RoleDTO roleDTO);
         public Task<CommonResponseModel> RoleAction(RoleDTO roleDTO);
-        public Task<CommonResponseModel> CreateAction(UserDetailDTO userDetailDTO);
+        public Task<CommonResponseModel> UserAction(UserDetailDTO userDetailDTO);
         public Task<CommonResponseModel> CreateUser(UserDetailDTO userDetailDTO);
         public Task<CommonResponseModel> CreateMenu(UserMenuDTO userMenuDTO);
         public Task<CommonResponseModel> GetRole();
         public Task<CommonResponseModel> GetUser();
+        public Task<CommonResponseModel> GetAllUser();
+        public Task<CommonResponseModel> GetMenu();
+        public Task<CommonResponseModel> CreateUserAssignMenu(UserAssignMenuDTO userAssignMenuDTO);
+        public Task<CommonResponseModel> GetUserAssignMenu(int User_id);
     }
 }

@@ -20,7 +20,6 @@ namespace Dev_Dashboard.Controllers
         {
             return _commenService.GetRole();
         }
-
         [HttpPost("CreateRole")]
         public Task<CommonResponseModel> Addrole(RoleDTO roleDTO)
         {
@@ -41,15 +40,35 @@ namespace Dev_Dashboard.Controllers
         {
             return _commenService.GetUser();
         }
-        [HttpPut("CreateAction")]
-        public Task<CommonResponseModel> CreateAction(UserDetailDTO userDetailDTO)
+        [HttpGet("GetAllUser")]
+        public Task<CommonResponseModel> GetAllUser()
         {
-            return _commenService.CreateAction(userDetailDTO);
+            return _commenService.GetAllUser();
+        }
+        [HttpPut("UserAction")]
+        public Task<CommonResponseModel> UserAction(UserDetailDTO userDetailDTO)
+        {
+            return _commenService.UserAction(userDetailDTO);
         }
         [HttpPost("CreateMenu")]
         public Task<CommonResponseModel> AddMenu(UserMenuDTO userMenuDTO)
         {
             return _commenService.CreateMenu(userMenuDTO);
+        }
+        [HttpGet("GetMenu")]
+        public Task<CommonResponseModel> GetMenu()
+        {
+            return _commenService.GetMenu();
+        }
+        [HttpPost("CreateUserAssignMenu")]
+        public Task<CommonResponseModel> AddUserAssignMenu(UserAssignMenuDTO userAssignMenuDTO)
+        {
+            return _commenService.CreateUserAssignMenu(userAssignMenuDTO);
+        }
+        [HttpGet("GetUserAssignMenu")]
+        public Task<CommonResponseModel> GetUserAssignMenu(int User_id)
+        {
+            return _commenService.GetUserAssignMenu(User_id);
         }
     }
 }
