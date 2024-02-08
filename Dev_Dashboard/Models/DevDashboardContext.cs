@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Dev_Dashboard.Model;
 
@@ -74,6 +72,9 @@ public partial class DevDashboardContext : DbContext
             entity.Property(e => e.MenuDescription)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Path)
+              .HasMaxLength(50)
+              .IsUnicode(false);
             entity.Property(e => e.MenuName)
                 .HasMaxLength(20)
                 .IsUnicode(false);

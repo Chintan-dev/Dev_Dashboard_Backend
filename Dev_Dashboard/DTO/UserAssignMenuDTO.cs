@@ -11,7 +11,10 @@
         public int MenuId { get; set; }
 
         public string MenuName { get; set; } = string.Empty;
+
         public string? MenuDescription { get; set; } =string.Empty;
+
+        public string? Path { get; set; } =string.Empty;
 
     }
 }

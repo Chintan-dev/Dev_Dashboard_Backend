@@ -7,5 +7,6 @@
         public string MenuName { get; set; } = null!;
 
         public string? MenuDescription { get; set; }
+        public string? Path { get; set; } = string.Empty;
     }
 }

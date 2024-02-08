@@ -70,5 +70,10 @@ namespace Dev_Dashboard.Controllers
         {
             return _commenService.GetUserAssignMenu(User_id);
         }
+        [HttpDelete("RemoveUserAssignMenu")]
+        public Task<CommonResponseModel> RemoveUserAssignMenu(int id)
+        {
+            return _commenService.RemoveUserAssignMenu(id);
+        }
     }
 }

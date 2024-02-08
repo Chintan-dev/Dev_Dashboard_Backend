@@ -4,6 +4,7 @@ using Dev_Dashboard.Model;
 using Dev_Dashboard.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Dev_Dashboard.Services
 {
@@ -263,7 +264,8 @@ namespace Dev_Dashboard.Services
                                     MenuName = joinedTables.userMenu.MenuName,
                                     UserId = joinedTables.userAssignMenu.UserId,  
                                     MenuId = joinedTables.userMenu.Id,
-                                    MenuDescription = joinedTables.userMenu.MenuDescription
+                                    MenuDescription = joinedTables.userMenu.MenuDescription,
+                                    Path = joinedTables.userMenu.Path
                                 })
                             .ToListAsync();
                 if (data == null)
@@ -276,6 +278,25 @@ namespace Dev_Dashboard.Services
             {
                 return new CommonResponseModel(StatusCode: 500, Success: false, Message: ex.Message, null);
             }
+        }
+        public async Task<CommonResponseModel> RemoveUserAssignMenu(int UserAssignMenu_id)
+        {
+            var userAssignMenu = await _context.UserAssignMenus.FirstOrDefaultAsync(x => x.Id == UserAssignMenu_id);
+
+            if (userAssignMenu == null)
+            {
+                return new CommonResponseModel(StatusCode: 400, Success: false, Message: "Data is null", Data: null);
+            }
+            _context.UserAssignMenus.Remove(userAssignMenu);
+            await _context.SaveChangesAsync();
+
+            return new CommonResponseModel(StatusCode: 200, Success: true, Message: "UserAssignMenus Remove", Data: null);
+        }
+
+        public async Task<CommonResponseModel> Login(LoginDTO userDetail)
+        {
+            //Authentication()
+            return new CommonResponseModel(StatusCode: 200, Success: true, Message: "Login", Data: null);
         }
     }
 }
