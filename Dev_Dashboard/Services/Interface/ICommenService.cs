@@ -20,5 +20,8 @@ namespace Dev_Dashboard.Services.Interface
         public Task<CommonResponseModel> GetUserAssignMenu(int User_id);
         public Task<CommonResponseModel> RemoveUserAssignMenu(int UserAssignMenu_id);
         public Task<CommonResponseModel> Login(LoginDTO userDetail);
+
+
+        public void WebSockets();
     }
 }

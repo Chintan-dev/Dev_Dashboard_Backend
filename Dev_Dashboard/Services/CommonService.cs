@@ -2,9 +2,14 @@
 using Dev_Dashboard.DTO;
 using Dev_Dashboard.Model;
 using Dev_Dashboard.Services.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Net.WebSockets;
+using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Net.WebSockets;
+using System.Text;
 
 namespace Dev_Dashboard.Services
 {
@@ -12,10 +17,12 @@ namespace Dev_Dashboard.Services
     {
         private readonly IMapper _mapper;
         private readonly DevDashboardContext _context;
-        public CommonService(DevDashboardContext context, IMapper mapper)
+        private readonly IGenerateTokenService _Jwt;
+        public CommonService(DevDashboardContext context, IMapper mapper, IGenerateTokenService jwt)
         {
             _context = context;
             _mapper = mapper;
+            _Jwt = jwt;
         }
 
         public async Task<CommonResponseModel> GetRole()
@@ -80,7 +87,7 @@ namespace Dev_Dashboard.Services
         {
             try
             {
-                List<UserDetail>? data = await _context.UserDetails.Where(x=>x.Active == true).ToListAsync();
+                List<UserDetail>? data = await _context.UserDetails.Where(x => x.Active == true).ToListAsync();
                 if (data == null)
                 {
                     return new CommonResponseModel(StatusCode: 400, Success: false, Message: "Data is null", Data: null);
@@ -262,7 +269,7 @@ namespace Dev_Dashboard.Services
                                     Id = joinedTables.userAssignMenu.Id,
                                     UserName = userDetails.Username,
                                     MenuName = joinedTables.userMenu.MenuName,
-                                    UserId = joinedTables.userAssignMenu.UserId,  
+                                    UserId = joinedTables.userAssignMenu.UserId,
                                     MenuId = joinedTables.userMenu.Id,
                                     MenuDescription = joinedTables.userMenu.MenuDescription,
                                     Path = joinedTables.userMenu.Path
@@ -295,8 +302,70 @@ namespace Dev_Dashboard.Services
 
         public async Task<CommonResponseModel> Login(LoginDTO userDetail)
         {
-            //Authentication()
-            return new CommonResponseModel(StatusCode: 200, Success: true, Message: "Login", Data: null);
+            var user = await AuthenticateUser(userDetail);
+
+            if (user != null)
+            {
+                var tokenString = _Jwt.GenerateToken(user);
+
+                return new CommonResponseModel(
+                    StatusCode: 200,
+                    Success: true,
+                    Message: "Login",
+                    Data: new
+                    {
+                        Username = user.Username,
+                        Email = user.Email,
+                        token = tokenString
+                    });
+            }
+            return new CommonResponseModel(StatusCode: 401, Success: false, Message: "Username or password is incorrect, please try again.", Data:null);
         }
+        private async Task<UserDetail?> AuthenticateUser(LoginDTO login)
+        {
+            UserDetail user = await _context.UserDetails.FirstOrDefaultAsync(x => x.Username == login.Username && x.Password == login.Password);
+
+            if (user != null)
+            {
+                return user;
+            }
+            return null;
+        }
+        public async void WebSockets()
+        {
+            var ws = new ClientWebSocket();
+            Console.WriteLine("Connecting to server");
+            await ws.ConnectAsync(new Uri("ws://localhost:6969/ws"),
+              CancellationToken.None);
+            Console.WriteLine("Connected!");
+
+            var receiveTask = Task.Run(async () =>
+            {
+                var buffer = new byte[1024];
+                while (true)
+                {
+                    var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer),
+                        CancellationToken.None);
+                    if (result.MessageType == WebSocketMessageType.Close)
+                    {
+                        break;
+                    }
+                    var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                    Console.WriteLine("Recieved: " + message);
+
+                }
+            });
+
+            await receiveTask;
+        }
+
+        //private bool VerifyPassword(string enteredPassword, string storedPasswordHash)
+        //{
+        //    // Use a secure password hashing algorithm like bcrypt
+        //    // For example, you can use a library like BCrypt.Net to hash and verify passwords
+        //    // Install-Package BCrypt.Net
+
+        //    return BCrypt.Net.BCrypt.Verify(enteredPassword, storedPasswordHash);
+        //}
     }
 }

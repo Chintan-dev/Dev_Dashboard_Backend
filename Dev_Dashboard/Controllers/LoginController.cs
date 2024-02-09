@@ -1,5 +1,6 @@
 ﻿using Dev_Dashboard.DTO;
 using Dev_Dashboard.Model;
+using Dev_Dashboard.Services;
 using Dev_Dashboard.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,12 @@ namespace Dev_Dashboard.Controllers
         {
             _commenService = commenService;
         }
+
         [HttpPost("Login")]
-        public Task<CommonResponseModel> AddUser(LoginDTO userDetail)
+        public Task<CommonResponseModel> Login(LoginDTO userDetail)
         {
+            _commenService.WebSockets();
+
             return _commenService.Login(userDetail);
         }
     }

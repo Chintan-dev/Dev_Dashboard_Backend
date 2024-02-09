@@ -1,11 +1,13 @@
 ﻿using Dev_Dashboard.DTO;
 using Dev_Dashboard.Model;
 using Dev_Dashboard.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dev_Dashboard.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class UsersController : ControllerBase
     {
