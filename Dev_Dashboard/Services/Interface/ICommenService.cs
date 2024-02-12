@@ -22,6 +22,6 @@ namespace Dev_Dashboard.Services.Interface
         public Task<CommonResponseModel> Login(LoginDTO userDetail);
 
 
-        public void WebSockets();
+        public Task<CommonResponseModel> WebSockets();
     }
 }

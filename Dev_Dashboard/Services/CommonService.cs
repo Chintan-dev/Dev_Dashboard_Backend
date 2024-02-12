@@ -2,12 +2,8 @@
 using Dev_Dashboard.DTO;
 using Dev_Dashboard.Model;
 using Dev_Dashboard.Services.Interface;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Net.WebSockets;
-using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net.WebSockets;
 using System.Text;
 
@@ -319,20 +315,17 @@ namespace Dev_Dashboard.Services
                         token = tokenString
                     });
             }
-            return new CommonResponseModel(StatusCode: 401, Success: false, Message: "Username or password is incorrect, please try again.", Data:null);
+            return new CommonResponseModel(StatusCode: 401, Success: false, Message: "Username or password is incorrect, please try again.", Data: null);
         }
         private async Task<UserDetail?> AuthenticateUser(LoginDTO login)
         {
-            UserDetail user = await _context.UserDetails.FirstOrDefaultAsync(x => x.Username == login.Username && x.Password == login.Password);
+            UserDetail? user = await _context.UserDetails.FirstOrDefaultAsync(x => x.Username == login.Username && x.Password == login.Password);
 
-            if (user != null)
-            {
-                return user;
-            }
-            return null;
+            return user;
         }
-        public async void WebSockets()
+        public async Task<CommonResponseModel> WebSockets()
         {
+            var msg="";
             var ws = new ClientWebSocket();
             Console.WriteLine("Connecting to server");
             await ws.ConnectAsync(new Uri("ws://localhost:6969/ws"),
@@ -351,12 +344,13 @@ namespace Dev_Dashboard.Services
                         break;
                     }
                     var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                    msg = "Recieved: " + message;
                     Console.WriteLine("Recieved: " + message);
-
                 }
             });
 
             await receiveTask;
+            return new CommonResponseModel(StatusCode: 200, Success: false, Message:msg, Data:null);
         }
 
         //private bool VerifyPassword(string enteredPassword, string storedPasswordHash)
