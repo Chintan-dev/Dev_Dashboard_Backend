@@ -27,7 +27,7 @@ namespace Dev_Dashboard.Services
             {
                 List<Role>? data = await _context.Roles.ToListAsync();
                 List<RoleDTO> roles = _mapper.Map<List<RoleDTO>>(data);
-                return new CommonResponseModel(StatusCode: 200, Success: true, Message: "GET done", Data: roles);
+                return new CommonResponseModel(StatusCode: 200, Success: true, Message: "GET sucssfuly", Data: roles);
             }
             catch (Exception ex)
             {
@@ -328,8 +328,7 @@ namespace Dev_Dashboard.Services
             var msg="";
             var ws = new ClientWebSocket();
             Console.WriteLine("Connecting to server");
-            await ws.ConnectAsync(new Uri("ws://localhost:6969/ws"),
-              CancellationToken.None);
+            await ws.ConnectAsync(new Uri("ws://localhost:6969/ws"),CancellationToken.None);
             Console.WriteLine("Connected!");
 
             var receiveTask = Task.Run(async () =>
@@ -337,7 +336,7 @@ namespace Dev_Dashboard.Services
                 var buffer = new byte[1024];
                 while (true)
                 {
-                    var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer),
+                    var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), 
                         CancellationToken.None);
                     if (result.MessageType == WebSocketMessageType.Close)
                     {
